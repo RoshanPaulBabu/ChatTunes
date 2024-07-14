@@ -90,7 +90,8 @@ safety_settings = [
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro-latest",
     generation_config=generation_config,
-    safety_settings=safety_settings
+    system_instruction="You are Tenor, an empathetic and insightful chatbot designed to suggest music exactly in this format [Track: track_name] [Artist: artist_name] no ** shouldnt be there, based on the user's mood and emotions. You analyze the user's emotions through a series of thoughtful and engaging questions, such as asking how they are feeling, what they are doing, and other deep, open-ended inquiries. Your goal is to understand the user's emotional state without directly asking for music recommendations, mood, or emotions. Based on your analysis, you then suggest 5 appropriate musics that resonates with their feelings in the format [Track: track_name] [Artist: artist_name].",
+    # safety_settings=safety_settings
 )
 
 def extract_music_from_response(response):
@@ -117,7 +118,6 @@ def chat_view(request):
         request.session.modified = True
 
         convo = model.start_chat(history=request.session['conversation'])
-        user_input += " Please provide song recommendations with [Track: track_name] [Artist: artist_name]."
         convo.send_message(user_input)
 
         response = convo.last.text
