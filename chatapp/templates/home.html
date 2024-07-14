@@ -1,0 +1,13 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Tenor</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
+    <h1>Welcome, {{ username }}!</h1>
+    <p>You are now logged in.</p>
+    <button onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+</body>
+</html>
