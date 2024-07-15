@@ -66,10 +66,10 @@ import re
 genai.configure(api_key=settings.GENAI_API_KEY)
 
 # Configure the Last.fm API
-API_KEY = '78f3e649680290cc37b5160067e47493'
-API_SECRET = 'fd2a639179f2b69a926074cddd518516'
+API_KEY = settings.API_KEY
+API_SECRET = settings.API_SECRET
 USERNAME = 'dasjhjhads'
-PASSWORD_HASH = pylast.md5('neseye7684@atebin.com')
+PASSWORD_HASH = pylast.md5(settings.PASSWORD)
 
 network = pylast.LastFMNetwork(api_key=API_KEY, api_secret=API_SECRET, username=USERNAME, password_hash=PASSWORD_HASH)
 

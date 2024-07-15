@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -129,8 +130,9 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-GENAI_API_KEY = "AIzaSyAoRC3dq9Ne9cq_EcVx-qe-gdar1jTRqxg"
-
-LASTFM_API_KEY = "78f3e649680290cc37b5160067e47493"
+GENAI_API_KEY = config('GENAI_API_KEY')
+API_KEY = config('API_KEY')
+API_SECRET = config('API_SECRET')
+PASSWORD= config('PASSWORD')
 
 LOGIN_URL = 'login_register'
