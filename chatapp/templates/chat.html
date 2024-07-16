@@ -148,15 +148,54 @@
             margin-top: 0.5rem;
         }
 
-        #recommended-songs a {
+        .song-thumbnail {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+        }
+
+        .song-info {
+            display: flex;
+        }
+
+        .song-description {
+            margin-top: 0.5rem;
+            color: #888;
+        }
+
+        .song-description .more-text {
+            display: none;
+        }
+
+        .song-description .dots {
+            display: inline;
+        }
+
+        .read-more {
+            background: none;
+            border: none;
             color: var(--secondary-color);
-            text-decoration: none;
-            display: inline-block;
+            cursor: pointer;
+            padding: 0;
+            font: inherit;
+            text-decoration: underline;
             margin-top: 0.5rem;
         }
 
-        #recommended-songs a:hover {
-            text-decoration: underline;
+        .action-button {
+            background-color: var(--secondary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .action-button:hover {
+            background-color: #04b8a8;
         }
     </style>
 </head>
@@ -186,11 +225,23 @@
             <ul>
                 {% for song in song_recommendations %}
                     <li>
-                        <div>
-                            <strong>{{ song.name }} by {{ song.artist }}</strong>
-                            <div class="tags">Tags: {% for tag in song.tags %}{{ tag.item.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+                        <div class="song-info">
+                            {% if song.thumbnail %}
+                                <img src="{{ song.thumbnail }}" alt="Album cover" class="song-thumbnail">
+                            {% endif %}
+                            <div>
+                                <strong>{{ song.name }} by {{ song.artist }}</strong>
+                                
+                                <div class="song-description">
+                                    {{ song.description|slice:":150"|safe }}<span class="dots">...</span>
+                                    <!-- <span class="more-text">{{ song.description|slice:"150:" }}</span>
+                                    <button class="read-more">Read more</button> -->
+                                </div>
+
+                                <button class="action-button" onclick="window.open('{{ song.youtube_link }}', '_blank')">Play on YouTube</button>
+                                <button class="action-button" onclick="window.open('{{ song.url }}', '_blank')">Play on Last.fm</button>
+                            </div>
                         </div>
-                        <a href="{{ song.url }}" target="_blank">Play on Last.fm</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -203,7 +254,31 @@
         <button type="submit">Send</button>
     </form>
     
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var readMoreButtons = document.querySelectorAll('.read-more');
+            
+            readMoreButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var dots = this.previousElementSibling;
+                    var moreText = dots.previousElementSibling;
+                    
+                    if (dots.style.display === 'none') {
+                        dots.style.display = 'inline';
+                        moreText.style.display = 'none';
+                        this.textContent = 'Read more';
+                    } else {
+                        dots.style.display = 'none';
+                        moreText.style.display = 'inline';
+                        this.textContent = 'Read less';
+                    }
+                });
+            });
+        });
+
         // Scroll chat history to the bottom
         var chatHistory = document.getElementById('chat-history');
         chatHistory.scrollTop = chatHistory.scrollHeight;

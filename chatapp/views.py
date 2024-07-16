@@ -129,11 +129,17 @@ def chat_view(request):
         for song in songs:
             try:
                 track = network.get_track(song['artist'], song['track'])
+                album = track.get_album()
+                album_cover = album.get_cover_image() if album else None
+
                 song_recommendations.append({
                     'name': track.title,
                     'artist': track.artist.name,
                     'url': track.get_url() + '?autostart',
-                    'tags': track.get_top_tags()
+                    'tags': track.get_top_tags(),
+                    'thumbnail': album_cover,
+                    'description': track.get_wiki_content(),
+                    'youtube_link': get_youtube_link(track)
                 })
             except pylast.WSError:
                 continue
@@ -143,3 +149,9 @@ def chat_view(request):
         'username': request.user.username,
         'song_recommendations': song_recommendations
     })
+
+def get_youtube_link(track):
+    # This function should return the YouTube link of the track if available.
+    # You can implement it by using additional APIs or data sources.
+    # For now, we will return a placeholder string.
+    return "https://www.youtube.com/results?search_query=" + track.artist.name + " " + track.title
